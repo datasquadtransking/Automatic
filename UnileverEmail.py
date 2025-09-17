@@ -16,7 +16,7 @@ EMAIL_DESTINATARIO = "weslleyworksilva@yahoo.com"
 SMTP_SERVIDOR = "smtp.task.com.br"
 SMTP_PORTA = 587
 
-# ====== ETAPA 1 - LEITURA E NORMALIZAÇÃO ======
+# ====== ETAPA 1 - LEITURA E NORMALIZAÇÃO ====== 
 df = pd.read_excel(ARQUIVO_ORIGINAL)
 df.columns = df.columns.str.strip().str.upper()
 df['DATA_INCLUSAO'] = pd.to_datetime(df['DATA_INCLUSAO'], dayfirst=True, errors='coerce')
