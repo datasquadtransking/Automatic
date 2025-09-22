@@ -69,6 +69,10 @@ try:
     time.sleep(3)  # Aguarda nova guia abrir
     driver.switch_to.window(driver.window_handles[-1])  # Foca na nova guia
 
+    #Ajustando contador
+    qtdcoletas = len(coletas)
+    contador = 0
+
     for coleta in coletas:
         campo_coleta = WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.XPATH, '/html/body/form/input[3]'))
@@ -81,6 +85,9 @@ try:
         time.sleep(4)
         campo_coleta.send_keys(Keys.CONTROL, '103')
         time.sleep(5)
+        contador = contador +1
+        faltacoletas = qtdcoletas - contador
+        print(f'Foram consultadas {contador} coletas. Faltam consultar {faltacoletas} coletas')
 
     print("✅ Todas as coletas visíveis do Excel foram consultadas.")
     
