@@ -5,6 +5,7 @@ from selenium.webdriver.support import expected_conditions as EC
 import time
 import os
 import shutil
+import csv
 
 # CONFIGURAÇÃO DE LOGIN
 LOGIN_URL = "http://sistema.ssw.inf.br"
@@ -21,18 +22,45 @@ XPATH_SENHA = '/html/body/form/input[4]'
 XPATH_BOTAO_LOGIN = '/html/body/form/a'
 
 # PASTAS
-download_folder = r"C:\Users\weslley\Downloads"
-pasta_destino = r"C:\Users\Weslley\OneDrive\001\Bases BI"
+download_folder = r"C:\Users\flavi\Downloads"
+pasta_destino = r"C:\Users\flavi\OneDrive\001\Bases BI"
 
-def pegar_ultimo_arquivo(folder, extensao=None):
-    arquivos = [os.path.join(folder, f) for f in os.listdir(folder)]
-    if extensao:
-        arquivos = [f for f in arquivos if f.lower().endswith(extensao.lower())]
-    if not arquivos:
-        return None
-    arquivo_recente = max(arquivos, key=os.path.getmtime)
-    return arquivo_recente
+# ---------- FUNÇÕES AUXILIARES ----------
+def esperar_novo_arquivo(pasta, prefixo="CSVmotoristas", extensao=".sswweb", timeout=180):
+    """Espera até que um NOVO arquivo com prefixo e extensão apareça na pasta e finalize o download."""
+    arquivos_antes = set(os.listdir(pasta))
+    
+    for _ in range(timeout):
+        arquivos_depois = set(os.listdir(pasta))
+        novos = arquivos_depois - arquivos_antes
 
+        # filtra pelo prefixo e extensão correta
+        novos_validos = [
+            f for f in novos 
+            if f.startswith(prefixo) and f.endswith(extensao) and not f.endswith(".crdownload")
+        ]
+
+        if novos_validos:
+            caminho = os.path.join(pasta, novos_validos[0])
+            # espera sumir o .crdownload
+            while os.path.exists(caminho + ".crdownload"):
+                time.sleep(1)
+            return caminho
+
+        time.sleep(1)
+    return None
+
+def converter_sswweb_para_csv(arquivo_origem, arquivo_destino):
+    """Converte o arquivo .sswweb para .csv com encoding e separador corrigidos."""
+    with open(arquivo_origem, "r", encoding="latin-1") as infile:
+        linhas = infile.readlines()
+
+    with open(arquivo_destino, "w", newline="", encoding="utf-8") as outfile:
+        writer = csv.writer(outfile, delimiter=";")
+        for linha in linhas:
+            writer.writerow(linha.strip().split(";"))
+
+# ---------- SCRIPT PRINCIPAL ----------
 try:
     # INICIAR NAVEGADOR
     driver = webdriver.Chrome()
@@ -65,33 +93,32 @@ try:
     campo_13.send_keys("s")
     print("✅ Campo id='13' atualizado para 's'.")
 
-    # --- AQUI entra sua lógica para realizar o DOWNLOAD do relatório ---
+    # --- AQUI entra a ação que dispara o download ---
     # Exemplo:
     # driver.find_element(By.ID, 'botao_download').click()
 
-    print("⏳ Aguardando o download terminar...")
-    time.sleep(90)  # ajuste conforme o tempo do seu download
+    print("⏳ Aguardando download do arquivo CSVmotoristas...")
+    ultimo_arquivo = esperar_novo_arquivo(download_folder, prefixo="CSVmotoristas", extensao=".sswweb")
 
-    # Renomeia último arquivo baixado para 'motoristas047.csv'
-    ultimo_arquivo = pegar_ultimo_arquivo(download_folder, '.sswweb')  # ajuste a extensão correta
     if ultimo_arquivo:
-        arquivo_renomeado = os.path.join(download_folder, 'motoristastki100132.csv')
-        if os.path.exists(arquivo_renomeado):
-            os.remove(arquivo_renomeado)
-        shutil.move(ultimo_arquivo, arquivo_renomeado)
-        print(f"✅ Arquivo renomeado para: {arquivo_renomeado}")
+        print(f"📂 Arquivo baixado detectado: {ultimo_arquivo}")
 
-        # Move para a pasta de destino
+        # Define nome final CSV
+        arquivo_destino = os.path.join(pasta_destino, "motoristastki100132.csv")
+
+        # Converte e salva direto na pasta de destino
         if not os.path.exists(pasta_destino):
-            os.makedirs(pasta_destino)  # cria a pasta de destino se não existir
-        arquivo_destino = os.path.join(pasta_destino, 'motoristastki100132.csv')
-        if os.path.exists(arquivo_destino):
-            os.remove(arquivo_destino)  # remove se existir
-        shutil.move(arquivo_renomeado, arquivo_destino)
-        print(f"✅ Arquivo movido para: {arquivo_destino}")
+            os.makedirs(pasta_destino)
+
+        converter_sswweb_para_csv(ultimo_arquivo, arquivo_destino)
+        print(f"✅ Arquivo convertido e movido para: {arquivo_destino}")
+
+        # Remove o arquivo original .sswweb
+        os.remove(ultimo_arquivo)
+        print("🗑️ Arquivo .sswweb original removido.")
 
     else:
-        print("⚠️ Nenhum arquivo encontrado para renomear e mover.")
+        print("⚠️ Nenhum arquivo CSVmotoristas encontrado dentro do tempo limite.")
 
 finally:
     input('Pressione Enter para finalizar e fechar o navegador...')
