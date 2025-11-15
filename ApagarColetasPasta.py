@@ -68,3 +68,4 @@ if __name__ == "__main__":
     print("\n" + "="*50)
     print("ROTINA DE EXCLUSÃO FINALIZADA.")
     print("="*50)
+print("ROTINA DE EXCLUSÃO FINALIZADA.")
