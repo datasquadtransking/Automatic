@@ -67,7 +67,7 @@ for coleta in coletas:
         # === Digitar 003 e abrir nova guia ===
         campo_103 = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, '3')))
         campo_103.send_keys("003")
-        time.sleep(3)
+        time.sleep(1.5)
 
         handles = driver.window_handles
         if len(handles) > 1:
@@ -79,13 +79,13 @@ for coleta in coletas:
         campo_f7.click()
         campo_f7.clear()
         campo_f7.send_keys(str(coleta))
-        time.sleep(3)
+        time.sleep(1.5)
 
         btn_pesquisar = WebDriverWait(driver, 10).until(
             EC.element_to_be_clickable((By.ID, '8'))
         )
         btn_pesquisar.click()
-        time.sleep(3)
+        time.sleep(1.5)
 
         driver.switch_to.window(driver.window_handles[-1])
 
@@ -101,7 +101,7 @@ for coleta in coletas:
             EC.element_to_be_clickable((By.ID, 'env_oco'))
         )
         btn_confirmar.click()
-        time.sleep(3)
+        time.sleep(1.5)
 
         print(f"✅ Coleta {coleta} processada com sucesso")
 
@@ -111,4 +111,4 @@ for coleta in coletas:
     finally:
         driver.quit()
         print(f"🔒 Navegador fechado após coleta {coleta}")
-        time.sleep(2)
+        time.sleep(1)
