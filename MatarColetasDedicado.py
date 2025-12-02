@@ -6,6 +6,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.chrome.options import Options
 
 # === 1️⃣ Ler a planilha e pegar a coluna COLETA ===
 caminho = r"C:\Users\flavi\Desktop\Baixar dedicado.xlsx"
@@ -21,7 +22,7 @@ CPF = '11744601640'
 USUARIO = 'weslley'
 SENHA = 'W@tki111'
 
-# ⚠️ IDs dos campos (confirme se estão corretos)
+# ⚠️ IDs dos campos
 ID_DOM = '1'
 ID_CPF = '2'
 ID_USUARIO = '3'
@@ -31,12 +32,18 @@ ID_BOTAO_LOGIN = '5'
 
 # === Função para login e retorno do driver ===
 def login_ssw():
+    chrome_options = Options()
+    chrome_options.add_argument("--window-size=1920,1080")
+    chrome_options.add_argument("--log-level=3")
+
     service = Service(ChromeDriverManager().install())
-    driver = webdriver.Chrome(service=service)
-    driver.maximize_window()
+    driver = webdriver.Chrome(service=service, options=chrome_options)
+
+    # <<< AQUI ele minimiza imediatamente >>>
+    driver.minimize_window()
+
     driver.get(LOGIN_URL)
 
-    # === Login ===
     WebDriverWait(driver, 15).until(EC.presence_of_element_located((By.ID, ID_DOM)))
     driver.find_element(By.ID, ID_DOM).send_keys(DOM)
     driver.find_element(By.ID, ID_CPF).send_keys(CPF)
@@ -49,6 +56,7 @@ def login_ssw():
     return driver
 
 
+
 # === Loop principal para cada coleta ===
 for coleta in coletas:
     try:
@@ -57,15 +65,21 @@ for coleta in coletas:
         driver = login_ssw()
 
         # === Campo f2 ===
-        campo_f2 = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.ID, '2')))
+        campo_f2 = WebDriverWait(driver, 20).until(
+            EC.presence_of_element_located((By.ID, '2'))
+        )
         campo_f2.click()
         campo_f2.clear()
         campo_f2.send_keys("SLI")
-        driver.execute_script("arguments[0].dispatchEvent(new Event('change'));", campo_f2)
+        driver.execute_script(
+            "arguments[0].dispatchEvent(new Event('change'));", campo_f2
+        )
         print("✅ Campo 'f2' atualizado para SLI")
 
         # === Digitar 003 e abrir nova guia ===
-        campo_103 = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, '3')))
+        campo_103 = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.ID, '3'))
+        )
         campo_103.send_keys("003")
         time.sleep(3)
 
@@ -75,7 +89,9 @@ for coleta in coletas:
         print("✅ Nova guia aberta e foco alterado")
 
         # === Processar coleta ===
-        campo_f7 = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.ID, '7')))
+        campo_f7 = WebDriverWait(driver, 10).until(
+            EC.element_to_be_clickable((By.ID, '7'))
+        )
         campo_f7.click()
         campo_f7.clear()
         campo_f7.send_keys(str(coleta))
