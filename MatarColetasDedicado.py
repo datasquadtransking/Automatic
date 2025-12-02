@@ -15,6 +15,11 @@ df = df.dropna(subset=['COLETA'])
 coletas = [int(float(x)) for x in df['COLETA']]
 print("✅ Coletas carregadas:", coletas)
 
+# === Contadores ===
+total_coletas = len(coletas)
+consultadas = 0
+print(f"📊 Total de coletas a processar: {total_coletas}")
+
 # === 2️⃣ Dados de login e IDs ===
 LOGIN_URL = "http://sistema.ssw.inf.br"
 DOM = 'TKI'
@@ -61,6 +66,7 @@ def login_ssw():
 for coleta in coletas:
     try:
         print(f"\n🚀 Iniciando processamento da coleta {coleta}")
+        print(f"📌 Progresso: {consultadas}/{total_coletas} já processadas")
 
         driver = login_ssw()
 
@@ -121,6 +127,10 @@ for coleta in coletas:
 
         print(f"✅ Coleta {coleta} processada com sucesso")
 
+        # === Atualiza o contador ===
+        consultadas += 1
+        print(f"📈 Atualizado: {consultadas}/{total_coletas} coletas concluídas")
+
     except Exception as e:
         print(f"❌ Erro na coleta {coleta}: {e}")
 
@@ -128,3 +138,9 @@ for coleta in coletas:
         driver.quit()
         print(f"🔒 Navegador fechado após coleta {coleta}")
         time.sleep(2)
+
+# === FIM ===
+print("\n🏁 PROCESSO FINALIZADO!")
+print(f"📊 Total: {total_coletas}")
+print(f"✅ Sucesso: {consultadas}")
+print(f"❌ Falharam: {total_coletas - consultadas}")
