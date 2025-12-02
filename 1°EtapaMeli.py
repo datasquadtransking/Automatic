@@ -219,7 +219,10 @@ df = df[
     df["PAGADOR"].fillna("").str.contains(regex_pagadores, case=False, regex=True)
 ]
 
-df = df[df["ULTIMA_OCORRENCIA"] != "11 - VALIDACAO CONCLUIDA"]
+df = df[
+    (df["ULTIMA_OCORRENCIA"] != "11 - VALIDACAO CONCLUIDA") &
+    (df["ULTIMA_OCORRENCIA"] != "99 - COLETA CANCELADA")
+]
 
 df = df[["NUMERO_COLETA", "PAGADOR", "ULTIMA_OCORRENCIA", "OBSERVACAO_2"]]
 
