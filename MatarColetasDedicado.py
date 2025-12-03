@@ -137,7 +137,7 @@ for coleta in coletas:
     finally:
         driver.quit()
         print(f"🔒 Navegador fechado após coleta {coleta}")
-        time.sleep(2)
+        time.sleep(3)
 
 # === FIM ===
 print("\n🏁 PROCESSO FINALIZADO!")
