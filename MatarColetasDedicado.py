@@ -61,6 +61,36 @@ def login_ssw():
     return driver
 
 
+def fechar_aviso(driver):
+    time.sleep(1)
+    handles = driver.window_handles
+
+    for handle in handles:
+        driver.switch_to.window(handle)
+        url = driver.current_url
+
+        # Verifica pela URL da janela de aviso
+        if "aviso_imprimir.htm" in url:
+            driver.close()
+            continue
+
+        # Verifica pelo texto da página
+        try:
+            body_text = driver.find_element(By.TAG_NAME, "body").text
+            if "REMESSA DE COBRANÇA SSW" in body_text:
+                driver.close()
+        except:
+            pass
+
+    # Volta para a guia principal
+    if len(driver.window_handles) > 0:
+        driver.switch_to.window(driver.window_handles[0])
+
+
+
+
+
+
 
 # === Loop principal para cada coleta ===
 for coleta in coletas:
