@@ -87,7 +87,7 @@ for coleta in coletas:
             EC.presence_of_element_located((By.ID, '3'))
         )
         campo_103.send_keys("003")
-        time.sleep(3)
+        time.sleep(5)
 
         handles = driver.window_handles
         if len(handles) > 1:
@@ -95,23 +95,23 @@ for coleta in coletas:
         print("✅ Nova guia aberta e foco alterado")
 
         # === Processar coleta ===
-        campo_f7 = WebDriverWait(driver, 10).until(
+        campo_f7 = WebDriverWait(driver, 15).until(
             EC.element_to_be_clickable((By.ID, '7'))
         )
         campo_f7.click()
         campo_f7.clear()
         campo_f7.send_keys(str(coleta))
-        time.sleep(3)
+        time.sleep(5)
 
-        btn_pesquisar = WebDriverWait(driver, 10).until(
+        btn_pesquisar = WebDriverWait(driver, 15).until(
             EC.element_to_be_clickable((By.ID, '8'))
         )
         btn_pesquisar.click()
-        time.sleep(3)
+        time.sleep(5)
 
         driver.switch_to.window(driver.window_handles[-1])
 
-        campo_ocor = WebDriverWait(driver, 10).until(
+        campo_ocor = WebDriverWait(driver, 15).until(
             EC.element_to_be_clickable((By.ID, 'fld_cod_ocor'))
         )
         campo_ocor.click()
@@ -119,11 +119,11 @@ for coleta in coletas:
         campo_ocor.send_keys("11")
         time.sleep(1)
 
-        btn_confirmar = WebDriverWait(driver, 10).until(
+        btn_confirmar = WebDriverWait(driver, 15).until(
             EC.element_to_be_clickable((By.ID, 'env_oco'))
         )
         btn_confirmar.click()
-        time.sleep(3)
+        time.sleep(5)
 
         print(f"✅ Coleta {coleta} processada com sucesso")
 
