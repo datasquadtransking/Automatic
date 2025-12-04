@@ -49,7 +49,7 @@ def login_ssw():
 
     driver.get(LOGIN_URL)
 
-    WebDriverWait(driver, 15).until(EC.presence_of_element_located((By.ID, ID_DOM)))
+    WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, ID_DOM)))
     driver.find_element(By.ID, ID_DOM).send_keys(DOM)
     driver.find_element(By.ID, ID_CPF).send_keys(CPF)
     driver.find_element(By.ID, ID_USUARIO).send_keys(USUARIO)
@@ -71,7 +71,7 @@ for coleta in coletas:
         driver = login_ssw()
 
         # === Campo f2 ===
-        campo_f2 = WebDriverWait(driver, 20).until(
+        campo_f2 = WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.ID, '2'))
         )
         campo_f2.click()

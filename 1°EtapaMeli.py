@@ -198,7 +198,7 @@ if not arquivo_ssw:
 # ====================================================================
 df = pd.read_csv(arquivo_ssw, sep=";", encoding="latin1")
 
-xlsx_final = os.path.join(PASTA_DESKTOP, "Relatorio_SSW_Final.xlsx")
+xlsx_final = os.path.join(PASTA_DESKTOP, "Baixar dedicado.xlsx")
 
 
 # ====================================================================
@@ -275,7 +275,7 @@ df["DIAS_PARA_ENTREGA"] = df["DIAS_PARA_ENTREGA"].fillna(-999).astype(int)
 # ====================================================================
 #   🎯 FILTRO SOLICITADO: MANTER APENAS DIAS_PARA_ENTREGA <= -8
 # ====================================================================
-df = df[df["DIAS_PARA_ENTREGA"] <= -8]
+df = df[(df["DIAS_PARA_ENTREGA"] <= -8) & (df["DIAS_PARA_ENTREGA"] > -800)]
 
 
 # ====================================================================
