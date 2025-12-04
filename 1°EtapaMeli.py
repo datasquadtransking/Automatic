@@ -298,4 +298,4 @@ except Exception as e:
 
 
 print("\n✅ PROCESSO FINALIZADO COM SUCESSO!")
-input("Pressione ENTER para sair...")
+time.sleep(10)

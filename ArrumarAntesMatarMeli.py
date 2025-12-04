@@ -1,5 +1,8 @@
 import pandas as pd
 import os
+import time
+
+time.sleep(5)
 
 # ====================================================================
 #   CAMINHOS DOS ARQUIVOS
