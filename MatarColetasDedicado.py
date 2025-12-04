@@ -11,8 +11,8 @@ from selenium.webdriver.chrome.options import Options
 # === 1️⃣ Ler a planilha e pegar a coluna COLETA ===
 caminho = r"C:\Users\flavi\Desktop\Baixar dedicado.xlsx"
 df = pd.read_excel(caminho)
-df = df.dropna(subset=['COLETA'])
-coletas = [int(float(x)) for x in df['COLETA']]
+df = df.dropna(subset=['NUMERO_COLETA'])
+coletas = [int(float(x)) for x in df['NUMERO_COLETA']]
 print("✅ Coletas carregadas:", coletas)
 
 # === Contadores ===
