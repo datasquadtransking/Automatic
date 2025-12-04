@@ -49,7 +49,7 @@ def login_ssw():
 
     driver.get(LOGIN_URL)
 
-    WebDriverWait(driver, 15).until(EC.presence_of_element_located((By.ID, ID_DOM)))
+    WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, ID_DOM)))
     driver.find_element(By.ID, ID_DOM).send_keys(DOM)
     driver.find_element(By.ID, ID_CPF).send_keys(CPF)
     driver.find_element(By.ID, ID_USUARIO).send_keys(USUARIO)
@@ -71,7 +71,7 @@ for coleta in coletas:
         driver = login_ssw()
 
         # === Campo f2 ===
-        campo_f2 = WebDriverWait(driver, 20).until(
+        campo_f2 = WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.ID, '2'))
         )
         campo_f2.click()
@@ -95,7 +95,7 @@ for coleta in coletas:
         print("✅ Nova guia aberta e foco alterado")
 
         # === Processar coleta ===
-        campo_f7 = WebDriverWait(driver, 15).until(
+        campo_f7 = WebDriverWait(driver, 10).until(
             EC.element_to_be_clickable((By.ID, '7'))
         )
         campo_f7.click()
@@ -103,7 +103,7 @@ for coleta in coletas:
         campo_f7.send_keys(str(coleta))
         time.sleep(5)
 
-        btn_pesquisar = WebDriverWait(driver, 15).until(
+        btn_pesquisar = WebDriverWait(driver, 10).until(
             EC.element_to_be_clickable((By.ID, '8'))
         )
         btn_pesquisar.click()
@@ -111,7 +111,7 @@ for coleta in coletas:
 
         driver.switch_to.window(driver.window_handles[-1])
 
-        campo_ocor = WebDriverWait(driver, 15).until(
+        campo_ocor = WebDriverWait(driver, 10).until(
             EC.element_to_be_clickable((By.ID, 'fld_cod_ocor'))
         )
         campo_ocor.click()
@@ -119,7 +119,7 @@ for coleta in coletas:
         campo_ocor.send_keys("11")
         time.sleep(1)
 
-        btn_confirmar = WebDriverWait(driver, 15).until(
+        btn_confirmar = WebDriverWait(driver, 10).until(
             EC.element_to_be_clickable((By.ID, 'env_oco'))
         )
         btn_confirmar.click()
