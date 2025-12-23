@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel de Acessos - Transking</title>
+    <style>
+        :root {
+            --azul-marinho: #0a192f;
+            --vermelho: #b91d1d;
+            --branco: #ffffff;
+            --bg-card: #112240;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--azul-marinho);
+            color: var(--branco);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            text-align: center;
+            border-bottom: 4px solid var(--vermelho);
+            margin-bottom: 30px;
+            width: 100%;
+            max-width: 900px;
+            padding-bottom: 10px;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 1000px;
+        }
+
+        .card {
+            background-color: var(--bg-card);
+            border-left: 5px solid var(--vermelho);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .card h2 {
+            color: var(--vermelho);
+            font-size: 1.2rem;
+            margin-top: 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 10px;
+        }
+
+        .info-item {
+            margin: 15px 0;
+        }
+
+        .label {
+            font-weight: bold;
+            color: #94a3b8;
+            display: block;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+        }
+
+        .value {
+            display: block;
+            background: rgba(255,255,255,0.05);
+            padding: 8px;
+            border-radius: 4px;
+            margin-top: 4px;
+            font-family: monospace;
+        }
+
+        .btn-link {
+            display: block;
+            background-color: var(--vermelho);
+            color: white;
+            text-decoration: none;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 8px;
+            font-weight: bold;
+            text-align: center;
+            transition: opacity 0.2s;
+        }
+
+        .btn-link:hover {
+            opacity: 0.8;
+        }
+
+        footer {
+            margin-top: 40px;
+            font-size: 0.8rem;
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Painel de Informações Transking</h1>
+    </header>
+
+    <div class="container">
+        
+        <div class="card">
+            <h2>Senhas Internet</h2>
+            <div class="info-item">
+                <span class="label">MODEM IMPLANTAR 5@ / STARLINK</span>
+                <span class="value">connect@@</span>
+            </div>
+            <div class="info-item">
+                <span class="label">TK FIN / TK OP@ / TK COM / TK FRT 5@</span>
+                <span class="value">11223344@@</span>
+            </div>
+            <div class="info-item">
+                <span class="label">TK MELI</span>
+                <span class="value">MeliTk11223344@</span>
+            </div>
+            <div class="info-item">
+                <span class="label">DIRETORIA / TK Galpão</span>
+                <span class="value">tk@11223344</span>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Sistemas e Acessos</h2>
+            <div class="info-item">
+                <span class="label">Openteck TK</span>
+                <span class="value">Senha: abc@123</span>
+            </div>
+            <div class="info-item">
+                <span class="label">Opentech Fini</span>
+                <span class="value">User: FINI/KING | Pass: Transking@2225</span>
+            </div>
+            <div class="info-item">
+                <span class="label">OneDrive Flávio</span>
+                <span class="value">SLItki@777**</span>
+            </div>
+            <div class="info-item">
+                <span class="label">PC Farley</span>
+                <span class="value">Transking@2025</span>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>AnyDesk</h2>
+            <div class="info-item">
+                <span class="label">AnyDesk Geral</span>
+                <span class="value">1874791149</span>
+            </div>
+            <div class="info-item">
+                <span class="label">AnyDesk HP</span>
+                <span class="value">1249014551</span>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Links de Compra</h2>
+            <div class="info-item">
+                <span class="label">Teclado USB</span>
+                <a href="https://abre.ai/usbteclado" target="_blank" class="btn-link">Abrir Link Teclado</a>
+            </div>
+            <div class="info-item">
+                <span class="label">Carregador Lenovo</span>
+                <a href="https://abre.ai/lenovocarregador" target="_blank" class="btn-link">Abrir Link Carregador</a>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        &copy; 2025 - Painel Interno
+    </footer>
+
+</body>
+</html>
