@@ -11,7 +11,7 @@ from email import encoders
 # ====== CONFIGURAÇÕES ======
 ARQUIVO_ORIGINAL = r"C:\Users\flavi\OneDrive\001\BI\planilha_coleta.xlsx"
 
-EMAIL_REMETENTE = "pedro.aquino@transking.com.br"
+EMAIL_REMETENTE = "automac@transking.com.br"
 SENHA_EMAIL = "P3dr0Tk2025"  # Senha ou senha de app
 EMAIL_DESTINATARIO = "weslley.transking@gmail.com"
 SMTP_SERVIDOR = "smtp.task.com.br"
