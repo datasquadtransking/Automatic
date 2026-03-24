@@ -66,12 +66,12 @@ try:
     usuario.send_keys("MONITORAMENTO1")
 
     senha = driver.find_element(By.ID, "senha")
-    senha.send_keys("Transking@2026")
+    senha.send_keys("@Tk@2026")
 
     login_btn = driver.find_element(By.ID, "Login")
     login_btn.click()
 
-    time.sleep(2)
+    time.sleep(5)
 
     botao_search = WebDriverWait(driver, 10).until(
         EC.element_to_be_clickable((By.ID, "botaosearch"))
@@ -103,16 +103,16 @@ try:
             campo_search.clear()
 
         campo_search.send_keys(id_viagem)
-        time.sleep(1)
+        time.sleep(5)
         campo_search.send_keys(Keys.RETURN)
-        time.sleep(2)
+        time.sleep(5)
 
         try:
-            aba_entregas = WebDriverWait(driver, 10).until(
+            aba_entregas = WebDriverWait(driver, 15).until(
                 EC.element_to_be_clickable((By.ID, "tabEntrega"))
             )
             aba_entregas.click()
-            time.sleep(1)
+            time.sleep(3)
         except (NoSuchElementException, TimeoutException):
             print(f"ERRO: Não foi possível abrir a aba 'Entregas' para o ID {id_viagem}.")
             df.loc[idx_original, "CHECK_ENTREGA"] = "SEM_ABA_ENTREGAS"
@@ -183,7 +183,7 @@ try:
 
         try:
             driver.find_element(By.TAG_NAME, 'body').send_keys(Keys.ESCAPE)
-            time.sleep(1)
+            time.sleep(5)
         except Exception:
             pass
 

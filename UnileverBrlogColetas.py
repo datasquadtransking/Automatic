@@ -46,7 +46,7 @@ try:
     driver.get("https://unilever2.brasilrisk.com.br/Login/Logout")
 
     driver.find_element(By.ID, "usuario").send_keys("MONITORAMENTO1")
-    driver.find_element(By.ID, "senha").send_keys("Transking@2026")
+    driver.find_element(By.ID, "senha").send_keys("@Tk@2026")
     driver.find_element(By.ID, "Login").click()
 
     time.sleep(2)
