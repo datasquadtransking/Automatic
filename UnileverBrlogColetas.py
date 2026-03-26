@@ -75,7 +75,7 @@ try:
         valor_data_campo = None
 
         try:
-            wait = WebDriverWait(driver, 10)
+            wait = WebDriverWait(driver, 15)
             chevron = wait.until(EC.presence_of_element_located((By.ID, "chevViagem")))
             chevron.click()
             modal_aberto = True
@@ -142,3 +142,4 @@ with pd.ExcelWriter(caminho, engine="openpyxl", mode="a", if_sheet_exists="repla
     df_novo.to_excel(writer, sheet_name="ColetasConsultadas", index=False)
 
 print("\nProcesso finalizado com sucesso!")
+#
