@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestão à Vista - Unilever</title>
+    <style>
+        body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; background-color: black; }
+        iframe { width: 100%; height: 100%; border: none; position: absolute; top: 0; left: 0; display: none; }
+        .active { display: block; }
+    </style>
+</head>
+<body>
+
+    <iframe id="dash1" class="active" src="https://app.powerbi.com/view?r=eyJrIjoiMjZjMjI1NjUtOWQxZi00YWMwLTg2YzMtZWFkMGYxMTNmMGJhIiwidCI6IjI3YzVjYTFiLWQ5YWQtNDA0ZS04YjFkLWNlYzY5ODBjNmYzNCJ9&pageName=5013101cbffe8126f1ef"></iframe>
+
+    <iframe id="dash2" src="https://app.powerbi.com/view?r=eyJrIjoiMjZjMjI1NjUtOWQxZi00YWMwLTg2YzMtZWFkMGYxMTNmMGJhIiwidCI6IjI3YzVjYTFiLWQ5YWQtNDA0ZS04YjFkLWNlYzY5ODBjNmYzNCJ9&pageName=335ca4cb938fa2cc7b11"></iframe>
+
+    <script>
+        var current = 1;
+        var time = 30000; // Tempo em milissegundos (30 segundos)
+
+        setInterval(function() {
+            document.getElementById('dash1').classList.remove('active');
+            document.getElementById('dash2').classList.remove('active');
+
+            if (current === 1) {
+                document.getElementById('dash2').classList.add('active');
+                current = 2;
+            } else {
+                document.getElementById('dash1').classList.add('active');
+                current = 1;
+            }
+        }, time);
+    </script>
+</body>
+</html>

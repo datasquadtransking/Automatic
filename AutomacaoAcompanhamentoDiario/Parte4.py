@@ -11,6 +11,7 @@ PASTA_PROJETO = os.path.dirname(os.path.abspath(__file__))
 SCRIPTS = [
     "Parte1.py", # Baixa o arquivo
     "Parte2.py", # Trata os dados
+    "Parte2_Unilever.py", # NOVO: Gera a base de chegada para a Unilever
     "Parte3.py"  # Envia o e-mail
 ]
 
