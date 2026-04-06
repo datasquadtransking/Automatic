@@ -12,6 +12,8 @@ SCRIPTS = [
     "Parte1.py", # Baixa o arquivo
     "Parte2.py", # Trata os dados
     "Parte2_Unilever.py", # NOVO: Gera a base de chegada para a Unilever
+    "Parte3Copia",  # Envia o e-mail
+
     "Parte3.py"  # Envia o e-mail
 ]
 
