@@ -12,7 +12,7 @@ SCRIPTS = [
     "Parte1.py", # Baixa o arquivo
     "Parte2.py", # Trata os dados
     "Parte2_Unilever.py", # NOVO: Gera a base de chegada para a Unilever
-    "Parte3Copia",  # Envia o e-mail
+    # "Parte3Copia",  # Envia o e-mail
 
     "Parte3.py"  # Envia o e-mail
 ]
@@ -42,10 +42,13 @@ def executar_automacao_completa():
             return
 
     fim_geral = time.time()
-    tempo_total = round((fim_geral - inicio_geral) / 60, 2)
-    
+    tempo_total_segundos = int(fim_geral - inicio_geral)
+
+    # O divmod divide os segundos por 60 e retorna (quociente, resto)
+    minutos, segundos = divmod(tempo_total_segundos, 60)
+
     print("="*50)
-    print(f"🎉 PROCESSO CONCLUÍDO EM {tempo_total} MINUTOS!")
+    print(f"🎉 PROCESSO CONCLUÍDO EM {minutos} MINUTOS E {segundos} SEGUNDOS!")
     print("📂 Todos os relatórios foram gerados e o e-mail foi enviado.")
 
 if __name__ == "__main__":

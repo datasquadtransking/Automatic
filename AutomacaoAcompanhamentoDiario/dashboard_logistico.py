@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import os
 import time
-from datetime import datetime, timedelta
+from datetime import datetime
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
@@ -21,14 +21,14 @@ def preparar_dados():
 
         df_unilever = df[df['CLIENTE'].str.contains('UNILEVER', na=False, case=False)].copy()
         if df_unilever.empty:
+            print("⚠️ Nenhuma carga Unilever encontrada.")
             return None
 
         # Tratamento de Datas
-        df_unilever['DT_COLETA_OBJ'] = pd.to_datetime(df_unilever['PROG. COLETA'], dayfirst=True)
-        df_unilever['DT_ENTREGA_OBJ'] = pd.to_datetime(df_unilever['PROG. ENTREGA'], dayfirst=True)
+        df_unilever['DT_COLETA_OBJ'] = pd.to_datetime(df_unilever['PROGRAMAÇÃO. COLETA'], dayfirst=True, errors='coerce')
+        df_unilever['DT_ENTREGA_OBJ'] = pd.to_datetime(df_unilever['PROGRAMAÇÃO. ENTREGA'], dayfirst=True, errors='coerce')
         
-        # Ajuste para data alvo (Feriado/Próximos dias)
-        data_alvo = datetime.now().date() + timedelta(days=0) 
+        data_alvo = datetime.now().date()
 
         condicoes = [
             (df_unilever['DT_COLETA_OBJ'].dt.date == data_alvo),
@@ -39,12 +39,10 @@ def preparar_dados():
         base_final = df_unilever[df_unilever['TIPO'] != 'OUTROS'].copy()
         base_final["ID_CONSULTA"] = base_final["ID"].astype(str).apply(lambda x: x.split("/")[-1])
         
-        # Inicializa colunas conforme os dois códigos originais
-        base_final["HORA_CHEGADA"] = "---"
-        base_final["CHECKIN_CD"] = "---"
-        base_final["DOCK_DATA"] = "---"
-        base_final["DME"] = "---"
-        base_final["CHEGADA_CLIENTE"] = "---"
+        # Inicializa colunas
+        cols_novas = ["HORA_CHEGADA", "CHECKIN_CD", "DOCK_DATA", "DME", "CHEGADA_CLIENTE"]
+        for col in cols_novas:
+            base_final[col] = ""
 
         return base_final
     except Exception as e:
@@ -54,17 +52,19 @@ def preparar_dados():
 def realizar_consultas_portal(df):
     options = webdriver.ChromeOptions()
     options.add_argument("--start-maximized")
+    # options.add_argument("--headless") # Descomente para rodar sem abrir a janela
     driver = webdriver.Chrome(options=options)
-    wait = WebDriverWait(driver, 20)
+    wait = WebDriverWait(driver, 25)
 
     try:
+        # Login
         driver.get("https://unilever2.brasilrisk.com.br/Login/Logout")
         wait.until(EC.presence_of_element_located((By.ID, "usuario"))).send_keys("MONITORAMENTO1")
         driver.find_element(By.ID, "senha").send_keys("@Tk@2026")
         driver.find_element(By.ID, "Login").click()
         
         wait.until(EC.element_to_be_clickable((By.ID, "botaosearch"))).click()
-        time.sleep(1)
+        time.sleep(2)
 
         for index, row in df.iterrows():
             id_viagem = row["ID_CONSULTA"]
@@ -75,15 +75,15 @@ def realizar_consultas_portal(df):
                 campo_search.clear()
                 campo_search.send_keys(id_viagem)
                 campo_search.send_keys(Keys.RETURN)
+                time.sleep(3)
                 
                 if tipo == "COLETA":
                     chevron = wait.until(EC.element_to_be_clickable((By.ID, "chevViagem")))
                     chevron.click()
                     time.sleep(2)
-                    
-                    # Captura conforme Parte2_UnileverCol.py
                     try:
-                        df.at[index, "HORA_CHEGADA"] = driver.find_element(By.XPATH, "//div[@class='boxFloat'][.//span[contains(text(),'Hora de chegada')]]").find_element(By.CLASS_NAME, "data-value").text.strip()
+                        chegada_col = driver.find_element(By.XPATH, "//div[@class='boxFloat'][.//span[contains(text(),'Hora de chegada')]]").find_element(By.CLASS_NAME, "data-value").text.strip()
+                        df.at[index, "HORA_CHEGADA"] = chegada_col
                         df.at[index, "CHECKIN_CD"] = driver.find_element(By.XPATH, "//div[@class='boxFloat'][.//span[contains(text(),'CheckIn CD')]]").find_element(By.CLASS_NAME, "data-value").text.strip()
                         df.at[index, "DOCK_DATA"] = driver.find_element(By.XPATH, "//div[@class='boxFloat'][.//span[contains(text(),'Dock')]]").find_element(By.CLASS_NAME, "data-value").text.strip()
                     except: pass
@@ -91,12 +91,16 @@ def realizar_consultas_portal(df):
                 elif tipo == "ENTREGA":
                     aba_entregas = wait.until(EC.element_to_be_clickable((By.ID, "tabEntrega")))
                     aba_entregas.click()
-                    time.sleep(3)
+                    time.sleep(4)
 
-                    # Captura conforme Parte2_UnileverEnt.py
                     try:
-                        df.at[index, "DME"] = driver.find_element(By.XPATH, "//div[@id='entregasnf']//tbody/tr[last()]/td[8]").text.strip()
-                        df.at[index, "CHEGADA_CLIENTE"] = driver.find_element(By.XPATH, "//div[@id='entregasnf']//tbody/tr[last()]/td[10]").text.strip()
+                        chegada_ent = driver.find_element(By.XPATH, "//div[@id='entregasnf']//tbody/tr[last()]/td[10]").text.strip()
+                        dme = driver.find_element(By.XPATH, "//div[@id='entregasnf']//tbody/tr[last()]/td[8]").text.strip()
+                        
+                        # ALIMENTA AS DUAS COLUNAS PARA NÃO DAR ERRO NO HTML
+                        df.at[index, "HORA_CHEGADA"] = chegada_ent
+                        df.at[index, "CHEGADA_CLIENTE"] = chegada_ent
+                        df.at[index, "DME"] = dme
                     except: pass
 
                 driver.find_element(By.TAG_NAME, "body").send_keys(Keys.ESCAPE)
@@ -110,34 +114,26 @@ def realizar_consultas_portal(df):
 if __name__ == "__main__":
     base = preparar_dados()
     if base is not None:
+        print(f"🚀 Iniciando consulta de {len(base)} viagens...")
         base_processada = realizar_consultas_portal(base)
         
-        # 1. Garantir que as colunas de data estejam no formato datetime para comparação
-        hoje = datetime.now().date()
-        
-        base_processada['DT_PROG_ENTREGA_AUX'] = pd.to_datetime(base_processada['PROG. ENTREGA'], dayfirst=True, errors='coerce')
-        base_processada['DT_DOCK_DATA'] = pd.to_datetime(base_processada['DOCK_DATA'], dayfirst=True, errors='coerce').dt.date
+        # Formatação final de segurança
+        base_processada['PROGRAMAÇÃO. ENTREGA'] = pd.to_datetime(
+            base_processada['PROGRAMAÇÃO. ENTREGA'], dayfirst=True, errors='coerce'
+        ).dt.strftime('%d/%m/%Y %H:%M')
 
-        # 2. Aplicar o Filtro: Manter apenas se PROGRAMAÇÃO. ENTREGA OU DOCK_DATA for igual a hoje
-        mask = (base_processada['DT_PROG_ENTREGA_AUX'].dt.date == hoje) | (base_processada['DT_DOCK_DATA'] == hoje)
-        resultado_filtrado = base_processada[mask].copy()
-
-        # --- MUDANÇA SOLICITADA: Formatação da Data de Entrega ---
-        # Converte para string no formato DD/MM/AAAA HH:MM
-        resultado_filtrado['PROG. ENTREGA'] = pd.to_datetime(resultado_filtrado['PROG. ENTREGA'], dayfirst=True, errors='coerce').dt.strftime('%d/%m/%Y %H:%M')
-
-        # 3. Organizar as colunas na ordem exata solicitada
+        # Definindo colunas que o Dashboard precisa encontrar
         colunas_ordenadas = [
             'ID', 'TIPO', 'PLACA', 'MOTORISTA', 'DOCK_DATA', 'HORA_CHEGADA', 
-            'CHECKIN_CD', 'PROG. ENTREGA', 'CHEGADA_CLIENTE', 'ORIGEM', 'DESTINO'
+            'CHECKIN_CD', 'PROGRAMAÇÃO. ENTREGA', 'CHEGADA_CLIENTE', 'ORIGEM', 'DESTINO'
         ]
 
-        colunas_presentes = [c for c in colunas_ordenadas if c in resultado_filtrado.columns]
-        resultado_final = resultado_filtrado[colunas_presentes]
+        # Filtra apenas o que existe e remove duplicatas se houver
+        colunas_finais = [c for c in colunas_ordenadas if c in base_processada.columns]
+        resultado_final = base_processada[colunas_finais].fillna("")
 
-        # 4. Salvar o arquivo
         if not resultado_final.empty:
             resultado_final.to_excel(ARQUIVO_SAIDA, index=False)
-            print(f"✅ Arquivo salvo com {len(resultado_final)} linhas filtradas. Data formatada em DD/MM/AAAA HH:MM.")
+            print(f"✅ Sucesso! Arquivo '{ARQUIVO_SAIDA}' gerado com {len(resultado_final)} linhas.")
         else:
-            print("⚠️ Nenhuma linha corresponde aos critérios de data (Hoje) para salvar.")
+            print("⚠️ O processamento não gerou dados válidos para salvar.")

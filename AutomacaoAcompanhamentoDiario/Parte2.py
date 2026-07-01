@@ -35,8 +35,8 @@ def tratar_base_acompanhamento():
 
         # 2. BUSCA DAS DATAS (USANDO OS NOMES REAIS DA IMAGEM)
         # Na sua imagem os nomes são: PROGRAMAÇÃO. COLETA e PROGRAMAÇÃO. ENTREGA
-        col_data_coleta = 'PROGRAMAÇÃO. COLETA'
-        col_data_entrega = 'PROGRAMAÇÃO. ENTREGA'
+        col_data_coleta = 'PROG. COLETA'
+        col_data_entrega = 'PROG. ENTREGA'
 
         print(f"🕒 Extraindo horários de: {col_data_coleta} e {col_data_entrega}")
 
@@ -64,7 +64,7 @@ def tratar_base_acompanhamento():
         # 5. REORDENANDO AS COLUNAS (CONFORME SUA NECESSIDADE DE COLAR)
         # ID, COLETA, COTACAO, ROTA, DOCK/AGENDAMENTO, TIPO
         # Note: Ajustei 'COTACAO' e 'COLETA' para os nomes que aparecem no seu cabeçalho
-        colunas_finais = ['ID', 'COLETA', 'COTACAO', 'ROTA', 'DOCK/AGENDAMENTO', 'TIPO']
+        colunas_finais = ['ID', 'COLETA', 'COTAÇÃO', 'ROTA', 'DOCK/AGENDAMENTO', 'TIPO']
         
         # Mantém outras colunas no final por segurança
         outras = [c for c in df.columns if c not in colunas_finais and c not in ['ORIGEM', 'DESTINO']]

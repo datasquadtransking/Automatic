@@ -12,24 +12,26 @@
 <body>
 
     <iframe id="dash1" class="active" src="https://app.powerbi.com/view?r=eyJrIjoiMjZjMjI1NjUtOWQxZi00YWMwLTg2YzMtZWFkMGYxMTNmMGJhIiwidCI6IjI3YzVjYTFiLWQ5YWQtNDA0ZS04YjFkLWNlYzY5ODBjNmYzNCJ9&pageName=5013101cbffe8126f1ef"></iframe>
-
     <iframe id="dash2" src="https://app.powerbi.com/view?r=eyJrIjoiMjZjMjI1NjUtOWQxZi00YWMwLTg2YzMtZWFkMGYxMTNmMGJhIiwidCI6IjI3YzVjYTFiLWQ5YWQtNDA0ZS04YjFkLWNlYzY5ODBjNmYzNCJ9&pageName=335ca4cb938fa2cc7b11"></iframe>
+    <iframe id="dash3" src="https://app.powerbi.com/view?r=eyJrIjoiOTI4NjE1ZjYtMjI0NC00Y2JhLTgwMWItYmQ2YmFlZWE0YjkyIiwidCI6IjI3YzVjYTFiLWQ5YWQtNDA0ZS04YjFkLWNlYzY5ODBjNmYzNCJ9"></iframe>
+    <iframe id="dash4" src="https://app.powerbi.com/view?r=eyJrIjoiOTI4NjE1ZjYtMjI0NC00Y2JhLTgwMWItYmQ2YmFlZWE0YjkyIiwidCI6IjI3YzVjYTFiLWQ5YWQtNDA0ZS04YjFkLWNlYzY5ODBjNmYzNCJ9&pageName=30e5e34ec6bdd023ed2c"></iframe>
 
     <script>
-        var current = 1;
-        var time = 30000; // Tempo em milissegundos (30 segundos)
+        var current = 0;
+        var iframes = document.querySelectorAll('iframe');
+        var time = 10000; // 10 segundos
 
         setInterval(function() {
-            document.getElementById('dash1').classList.remove('active');
-            document.getElementById('dash2').classList.remove('active');
+            // Remove a classe active de todos os iframes
+            iframes.forEach(function(iframe) {
+                iframe.classList.remove('active');
+            });
 
-            if (current === 1) {
-                document.getElementById('dash2').classList.add('active');
-                current = 2;
-            } else {
-                document.getElementById('dash1').classList.add('active');
-                current = 1;
-            }
+            // Avança para o próximo índice
+            current = (current + 1) % iframes.length;
+
+            // Adiciona active ao iframe atual
+            iframes[current].classList.add('active');
         }, time);
     </script>
 </body>

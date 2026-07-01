@@ -58,7 +58,7 @@ try:
 
     driver.get("https://unilever2.brasilrisk.com.br/Login/Logout")
 
-    WebDriverWait(driver, 20).until(
+    WebDriverWait(driver, 25).until(
         EC.presence_of_element_located((By.ID, "usuario"))
     )
 
@@ -73,7 +73,7 @@ try:
 
     time.sleep(5)
 
-    botao_search = WebDriverWait(driver, 10).until(
+    botao_search = WebDriverWait(driver, 20).until(
         EC.element_to_be_clickable((By.ID, "botaosearch"))
     )
     botao_search.click()
@@ -103,16 +103,16 @@ try:
             campo_search.clear()
 
         campo_search.send_keys(id_viagem)
-        time.sleep(5)
+        time.sleep(2)
         campo_search.send_keys(Keys.RETURN)
-        time.sleep(5)
+        time.sleep(2)
 
         try:
-            aba_entregas = WebDriverWait(driver, 15).until(
+            aba_entregas = WebDriverWait(driver, 20).until(
                 EC.element_to_be_clickable((By.ID, "tabEntrega"))
             )
             aba_entregas.click()
-            time.sleep(3)
+            time.sleep(2)
         except (NoSuchElementException, TimeoutException):
             print(f"ERRO: Não foi possível abrir a aba 'Entregas' para o ID {id_viagem}.")
             df.loc[idx_original, "CHECK_ENTREGA"] = "SEM_ABA_ENTREGAS"
@@ -148,7 +148,7 @@ try:
         except Exception:
             print("Falha na captura por XPath direto da última linha. Tentando fallback.")
             try:
-                linhas = WebDriverWait(driver, 10).until(
+                linhas = WebDriverWait(driver, 20).until(
                     EC.presence_of_all_elements_located((By.XPATH, "//div[@id='entregasnf']//tbody/tr"))
                 )
 

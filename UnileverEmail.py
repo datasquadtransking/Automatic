@@ -12,7 +12,7 @@ ARQUIVO_ORIGINAL = r"C:\Users\flavi\OneDrive\001\BI\planilha_coleta.xlsx"
 
 EMAIL_REMETENTE = "automac@transking.com.br"
 SENHA_EMAIL = "P3dr0Tk2025"  # Senha ou senha de app
-EMAIL_DESTINATARIO = "weslleyworksilva@yahoo.com"
+EMAIL_DESTINATARIO = "weslley.transking@gmail.com"
 SMTP_SERVIDOR = "smtp.task.com.br"
 SMTP_PORTA = 587
 
